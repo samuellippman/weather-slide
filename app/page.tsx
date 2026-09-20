@@ -69,17 +69,22 @@ export default function WeatherSlide() {
 
     try {
       const canvas = await html2canvas(weatherRef.current, {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#1e40af',
         scale: 2,
         useCORS: true,
+        logging: false,
+        allowTaint: true,
       });
 
       const link = document.createElement('a');
       link.href = canvas.toDataURL('image/png');
       link.download = `weather-${date.toISOString().split('T')[0]}.png`;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
     } catch (error) {
       console.error('Error downloading image:', error);
+      alert('Failed to download image. Please try again.');
     }
   };
 
@@ -103,7 +108,7 @@ export default function WeatherSlide() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Controls - Hidden in export */}
         <div className="bg-white rounded-lg shadow-md p-4 mb-6 no-export">
           <div className="flex flex-wrap items-center gap-4 justify-between">
@@ -176,36 +181,36 @@ export default function WeatherSlide() {
         <div
           ref={weatherRef}
           style={{ aspectRatio: '16/9' }}
-          className="bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg shadow-lg p-8 flex flex-col"
+          className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg shadow-lg p-6 flex flex-col justify-between"
         >
           {loading ? (
             <div className="flex items-center justify-center h-full">
-              <p className="text-white text-2xl">Loading weather...</p>
+              <p className="text-white text-3xl">Loading weather...</p>
             </div>
           ) : weather ? (
             <>
-              <div className="text-white mb-6">
-                <h2 className="text-4xl font-bold">{dateStr}</h2>
+              <div className="text-white">
+                <h2 className="text-5xl font-bold">{dateStr}</h2>
               </div>
 
-              <div className="flex-1 grid grid-cols-9 gap-2">
+              <div className="flex-1 flex gap-3 items-center justify-between overflow-hidden">
                 {weather.hours.map((hour, index) => {
                   const hourNum = 9 + index;
                   return (
                     <div
                       key={index}
-                      className="bg-white/20 rounded-lg p-3 flex flex-col items-center justify-center text-white backdrop-blur-sm"
+                      className="flex-1 bg-white/15 rounded-lg p-4 flex flex-col items-center justify-center text-white backdrop-blur-sm h-full"
                     >
-                      <div className="text-sm font-semibold mb-2">
+                      <div className="text-2xl font-semibold mb-3">
                         {hourNum}:00
                       </div>
-                      <div className="text-4xl mb-2">
+                      <div className="text-6xl mb-3">
                         {getWeatherEmoji(hour.condition.text)}
                       </div>
-                      <div className="text-2xl font-bold">
-                        {Math.round(hour.temp_c)}°C
+                      <div className="text-5xl font-bold mb-2">
+                        {Math.round(hour.temp_c)}°
                       </div>
-                      <div className="text-xs text-white/80 mt-1 text-center">
+                      <div className="text-sm text-white/90 text-center leading-tight">
                         {hour.condition.text}
                       </div>
                     </div>
@@ -215,7 +220,7 @@ export default function WeatherSlide() {
             </>
           ) : (
             <div className="flex items-center justify-center h-full">
-              <p className="text-white text-2xl">Unable to load weather</p>
+              <p className="text-white text-3xl">Unable to load weather</p>
             </div>
           )}
         </div>
