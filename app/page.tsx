@@ -68,23 +68,39 @@ export default function WeatherSlide() {
     if (!weatherRef.current) return;
 
     try {
-      const canvas = await html2canvas(weatherRef.current, {
+      const element = weatherRef.current;
+
+      const canvas = await html2canvas(element, {
         backgroundColor: '#1e40af',
         scale: 2,
         useCORS: true,
-        logging: false,
         allowTaint: true,
+        logging: true,
+        width: element.offsetWidth,
+        height: element.offsetHeight,
       });
 
+      const blob = await new Promise<Blob>((resolve) => {
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob);
+        }, 'image/png');
+      });
+
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = canvas.toDataURL('image/png');
+      link.href = url;
       link.download = `weather-${date.toISOString().split('T')[0]}.png`;
+      link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+
+      setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 100);
     } catch (error) {
       console.error('Error downloading image:', error);
-      alert('Failed to download image. Please try again.');
+      alert(`Failed to download image: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
