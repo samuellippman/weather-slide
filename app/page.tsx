@@ -196,37 +196,78 @@ export default function WeatherSlide() {
         {/* Weather Display - This is what gets exported */}
         <div
           ref={weatherRef}
-          style={{ aspectRatio: '16/9' }}
-          className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg shadow-lg p-6 flex flex-col justify-between"
+          style={{
+            aspectRatio: '16/9',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
+            borderRadius: '8px',
+            padding: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
         >
           {loading ? (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-white text-3xl">Loading weather...</p>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+              }}
+            >
+              <p style={{ color: 'white', fontSize: '32px' }}>Loading weather...</p>
             </div>
           ) : weather ? (
             <>
-              <div className="text-white">
-                <h2 className="text-5xl font-bold">{dateStr}</h2>
+              <div style={{ color: 'white' }}>
+                <h2 style={{ fontSize: '48px', fontWeight: 'bold' }}>{dateStr}</h2>
               </div>
 
-              <div className="flex-1 flex gap-3 items-center justify-between overflow-hidden">
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  gap: '12px',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  overflow: 'hidden',
+                }}
+              >
                 {weather.hours.map((hour, index) => {
                   const hourNum = 9 + index;
                   return (
                     <div
                       key={index}
-                      className="flex-1 bg-white/15 rounded-lg p-4 flex flex-col items-center justify-center text-white backdrop-blur-sm h-full"
+                      style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                        borderRadius: '8px',
+                        padding: '16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        height: '100%',
+                      }}
                     >
-                      <div className="text-2xl font-semibold mb-3">
+                      <div style={{ fontSize: '22px', fontWeight: '600', marginBottom: '12px' }}>
                         {hourNum}:00
                       </div>
-                      <div className="text-6xl mb-3">
+                      <div style={{ fontSize: '60px', marginBottom: '12px' }}>
                         {getWeatherEmoji(hour.condition.text)}
                       </div>
-                      <div className="text-5xl font-bold mb-2">
+                      <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '8px' }}>
                         {Math.round(hour.temp_c)}°
                       </div>
-                      <div className="text-sm text-white/90 text-center leading-tight">
+                      <div
+                        style={{
+                          fontSize: '14px',
+                          color: 'rgba(255, 255, 255, 0.9)',
+                          textAlign: 'center',
+                          lineHeight: '1.2',
+                        }}
+                      >
                         {hour.condition.text}
                       </div>
                     </div>
@@ -235,8 +276,15 @@ export default function WeatherSlide() {
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-white text-3xl">Unable to load weather</p>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+              }}
+            >
+              <p style={{ color: 'white', fontSize: '32px' }}>Unable to load weather</p>
             </div>
           )}
         </div>
